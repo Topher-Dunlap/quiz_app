@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- head -->
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Quiz App</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="style.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Mulish:wght@200;400&family=Staatliches&display=swap" rel="stylesheet">
+  </head>
+  <header>
+    <h1> Interesting Facts You Might Not Know </h1>
+  </header>
+  <!-- Body -->
+  <body>
+    <div id="scoreAndQuestionCounter">
+        <p id="counterStart"></p>
+          <div>
+          </div>
+    </div>
+    <div id="container">
+        <main>
+              <section role="region" class="catBox">
+                <!-- Starting Box -->
+                <section class="startQuiz box">
+                  <img src="images/huh.jpg" alt="Begin Quiz" class="images">
+                  <button type="button" class="startButton button">Start</button>
+                </section>
+                <!-- Question Box -->
+                <form>
+                  <div class="questionBox box altBox">
+                    <!-- populated by function-->
+                  </div>
+                </form>
+                <!-- wrong answer box -->
+                <section id="sadFace" class="tempResponse">
+                  <h2> Oh No! Incorrect Answer </h2>
+                  <img src="images/sadFace.jpg" alt="wrong answer" class="images">
+                  <div id="wrongAnswer">
+                  </div>
+                  <div class="button">
+                    <button type="next" class="nextButton">Next</button>
+                  </div>
+                </section>
+                <!-- Correct answer box -->
+                <section id="happyFace" class="tempResponse">
+                  <h2>Great job, that was right!</h2>
+                  <img src="images/happyFace.jpg" alt="correct answer" class="images">
+                  <div class="button">
+                    <button type="next" class="nextButton">Next</button>
+                  </div>
+                </section>
+                <!-- Total score box -->
+                <section id="totalScoreBox">                  
+                  <img src="images/finalScore.jpg" alt="finalScore" id="totalImage">
+                  <div class="button">
+                    <button type="reset" class="resetButton">Reset</button>
+                  </div>
+                </section>
+              </section>
+        </main>
+        <footer>
+            <h4 class="copywrite">© Topher Dunlap</h4>
+        </footer>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
