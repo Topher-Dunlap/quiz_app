@@ -1,105 +1,107 @@
 // Questions Object
-
-const quizQuestions = [
-  {
-    question: "What's Chicagos 'Windy City' nickname mean?",
-    answers: [
-      "Midwestern Great Plains Wind", 
-      "High winds off lake Superior", 
-      "Its residents were considered “windbags” and “full of hot air.", 
-      "That has never been a chicago nickname", 
-      "Flatulence"],
-    userAnswer: 0,
-    correctAnswer: "Its residents were considered “windbags” and “full of hot air.",
-    id: "chicago",
-  },
-  {
-    question: "What’s kind of animal is bullet proof?",
-    answers: [
-      "HoneyBadger",
-      "Rhino",
-      "Hippo",
-      "Elephant",
-      "Armadillo",
-    ],
-    userAnswer: 0,
-    correctAnswer: "Armadillo",
-    id: "bullet",
-  },
-  {
-    question: "What's an unusual technique Firefighters use when batteling flames?",
-    answers: [
-      "They Use Glitter Bombs",
-      "They make water 'wetter'",
-      "They Blast heavy Metal from their Firetruck",
-      "They Blow up a building",
-      "They Throw their axes from afar",
-    ],
-    userAnswer: 0,
-    correctAnswer: "They make water 'wetter'",
-    id: "fireFighter",
-  },
-  {
-    question: "What was active on the moon when dinosaurs were alive?",
-    answers: [
-      "Volcanos",
-      "Rivers",
-      "Aliens",
-      "Small animals",
-      "Jet Stream",
-    ],
-    userAnswer: 0,
-    correctAnswer: "Volcanos",
-    id: "go",
-  },
-  {
-    question: "What were avocados originally named after?",
-    answers: [
-      "Earth Berry", 
-      "Tree Stones", 
-      "Green Jewel", 
-      "Alligator Heart", 
-      "Testicles"],
+STORE = {
+  quizQuestions: [
+    {
+      question: "What's Chicagos 'Windy City' nickname mean?",
+      answers: [
+        "Midwestern Great Plains Wind", 
+        "High winds off lake Superior", 
+        "Its residents were considered “windbags” and “full of hot air.", 
+        "That has never been a chicago nickname", 
+        "Flatulence"],
       userAnswer: 0,
-    correctAnswer: "Testicles",
-    id: "temp",
-  },
-];
+      correctAnswer: "Its residents were considered “windbags” and “full of hot air.",
+      id: "chicago",
+    },
+    {
+      question: "What’s kind of animal is bullet proof?",
+      answers: [
+        "HoneyBadger",
+        "Rhino",
+        "Hippo",
+        "Elephant",
+        "Armadillo",
+      ],
+      userAnswer: 0,
+      correctAnswer: "Armadillo",
+      id: "bullet",
+    },
+    {
+      question: "What's an unusual technique Firefighters use when batteling flames?",
+      answers: [
+        "They Use Glitter Bombs",
+        "They make water 'wetter'",
+        "They Blast heavy Metal from their Firetruck",
+        "They Blow up a building",
+        "They Throw their axes from afar",
+      ],
+      userAnswer: 0,
+      correctAnswer: "They make water 'wetter'",
+      id: "fireFighter",
+    },
+    {
+      question: "What was active on the moon when dinosaurs were alive?",
+      answers: [
+        "Volcanos",
+        "Rivers",
+        "Aliens",
+        "Small animals",
+        "Jet Stream",
+      ],
+      userAnswer: 0,
+      correctAnswer: "Volcanos",
+      id: "go",
+    },
+    {
+      question: "What were avocados originally named after?",
+      answers: [
+        "Earth Berry", 
+        "Tree Stones", 
+        "Green Jewel", 
+        "Alligator Heart", 
+        "Testicles"],
+        userAnswer: 0,
+      correctAnswer: "Testicles",
+      id: "temp",
+    },
+  ],
+  // Global Variables
+  indexNumber: 0,
+  questionNumber: 0,
+  score: 0
+}
 
-// Global Variables
-let indexNumber = 0;
-let questionNumber = 0;
-let score = 0;
 
-//begins the quiz
-function startQuiz() {
+//** RENDER FUNCTION **//
+function renderQuiz() {
   $(".altBox").hide();
   $("#sadFace").hide();
   $("#happyFace").hide();
   $("#totalScoreBox").hide();
   $(".questionBox").hide();
-  $(".startQuiz").on("click", ".startButton", function (event) {
-    $(".startQuiz").hide();
+  $(".renderQuiz").on("click", ".startButton", function (event) {
+    $(".renderQuiz").hide();
     $(".questionBox").show();
-    htmlGenerator();
+    renderHtml();
   });
 }
 
-function htmlGenerator() {
+//** RENDER FUNCTION **//
+function renderHtml() {
   htmlHolder = '';
   htmlHolder += addQuestion();
   htmlHolder += addButtons();
   $(".questionBox").html(htmlHolder);
 }
 
-//creates html for question form
+//** CONTROLLER FUNCTION **//
 function addQuestion() {
   questionNumber += 1;
   if (questionNumber <= 5) {
     let htmlHolder = "";
-    let quizQuestionTitle = quizQuestions[indexNumber].question;
-    const quizAnswers = quizQuestions[indexNumber].answers;
-    const quizId = quizQuestions[indexNumber].id;
+    let quizQuestionTitle = STORE.quizQuestions[STORE.indexNumber].question;
+    const quizAnswers = STORE.quizQuestions[STORE.indexNumber].answers;
+    const quizId = STORE.quizQuestions[STORE.indexNumber].id;
     htmlHolder = `<h3> ${quizQuestionTitle} </h3>`;
     quizAnswers.forEach((a, idx) => {
       htmlHolder += `
@@ -112,10 +114,11 @@ function addQuestion() {
     return htmlHolder;
   }
   else {
-    totalScore();
+    renderTotalScore();
   }
 }
 
+//** CONTROLLER FUNCTION **//
 function addButtons() {
   let buttonHolder = "";
   buttonHolder += `
@@ -127,39 +130,45 @@ function addButtons() {
   return buttonHolder;
 }
 
-//consolidation function
+//** CONTROLLER FUNCTION **//
 function nextQuestion() {
   $(".questionBox").on("click", ".nextButton", function (event) {
     //check that user has made selection
     event.preventDefault();
-    checkAnswer();
+    renderAnswer();
   });
 }
 
-function checkAnswer() {
+//** CONTROLLER FUNCTION **//
+function incrementIndex() {
+  STORE.indexNumber += 1;
+}
+
+//** RENDER FUNCTION **//
+function renderAnswer() {
   if ($('input:checked').length > 0) {
     let selectedAnswer = $('input:checked');
     let answer = selectedAnswer.val();
     //if is correct
-    if (answer === quizQuestions[indexNumber].correctAnswer) {
+    if (answer === STORE.quizQuestions[STORE.indexNumber].correctAnswer) {
       // determine if end of quiz
-        correctAnswerResponse();
-        quizQuestions[indexNumber].userAnswer = 1;
+        renderCorrectAnswerResponse();
+        STORE.quizQuestions[STORE.indexNumber].userAnswer = 1;
         $(".questionBox").empty();
         $("#counterStart").empty();
-        populateScore();
-        indexNumber += 1;
-        htmlGenerator();
+        renderScore();
+        incrementIndex()
+        renderHtml();
       }
     //if is incorrect
     else {
-      wrongAnswerResponse();
+      renderWrongAnswerResponse();
       // determine if end of quiz
         $(".questionBox").empty();
         $("#counterStart").empty();
-        populateScore();
-        indexNumber += 1;
-        htmlGenerator();
+        renderScore();
+        incrementIndex()
+        renderHtml();
     }
   }
   //if user hasn't made selection prompt until if statement is true.
@@ -169,18 +178,18 @@ function checkAnswer() {
   }
 }
 
-
-function populateScore() {
-  scoreGrab = quizQuestions[indexNumber].userAnswer;
-  score += scoreGrab
-  $("#counterStart").append("<p> Question:" + questionNumber + "/5 </p>" + "<p> Score:" + score + "</p>");
+//** RENDER FUNCTION **//
+function renderScore() {
+  scoreGrab = STORE.quizQuestions[STORE.indexNumber].userAnswer;
+  STORE.score += scoreGrab
+  $("#counterStart").append("<p> Question: " + questionNumber + "/5 </p>" + "<p> Score: " + STORE.score + "</p>");
 }
 
-//generates wrong answer pop up
-function wrongAnswerResponse() {
+//** RENDER FUNCTION **//
+function renderWrongAnswerResponse() {
   $(".questionBox").hide(); 
   $(".wrongAnswerTemp").remove();
-  $("#wrongAnswer").append(`<p class="wrongAnswerTemp">The correct answer was: "${quizQuestions[indexNumber].correctAnswer}"</p>`)
+  $("#wrongAnswer").append(`<p class="wrongAnswerTemp">The correct answer was: "${STORE.quizQuestions[STORE.indexNumber].correctAnswer}"</p>`)
   $("#sadFace").show();
   $("#sadFace").on("click", ".nextButton", function (event) {
     $("#sadFace").hide();
@@ -188,8 +197,8 @@ function wrongAnswerResponse() {
     });
 }
 
-//generates correct answer pop up
-function correctAnswerResponse() {
+//** RENDER FUNCTION **//
+function renderCorrectAnswerResponse() {
   $(".questionBox").hide(); 
   $("#happyFace").show();
   $("#happyFace").on("click", ".nextButton", function (event) { 
@@ -198,7 +207,8 @@ function correctAnswerResponse() {
     });
 }
 
-function quizReset() {
+//** RENDER FUNCTION **//
+function renderReset() {
   $(".catBox").on("click", ".resetButton", function (event) {
     event.preventDefault();
     $(".questionBox").empty();
@@ -206,38 +216,40 @@ function quizReset() {
     $("#happyFace").hide();
     $("#sadFace").hide();
     $("#totalScoreBox").hide();
-    $(".startQuiz").show();
+    $(".renderQuiz").show();
+    $("#counterStart").empty();
+    $("#counterStart").show();
     resetValues();
   });
 }
 
-function totalScore() {
+//** RENDER FUNCTION **//
+function renderTotalScore() {
     $("#finalScoreText").remove();
-    $("#totalScoreBox").prepend(`<h2 id="finalScoreText"> Final Score: ${score}/5 </h2>`);
+    $("#totalScoreBox").prepend(`<h2 id="finalScoreText"> Final Score: ${STORE.score}/5 </h2>`);
     $("#totalScoreBox").show();
     $("#counterStart").empty();
     $("#happyFace").hide();
     $("#sadFace").hide();
     $(".questionBox").hide();
     $("#totalScoreBox").on("click", ".resetButton", function (event) { 
-      quizReset()
+      renderReset()
       }); 
 }
 
+//** CONTROLLER FUNCTION **//
 function resetValues() {
-  indexNumber = 0;
+  STORE.indexNumber = 0;
   questionNumber = 0;
-  score = 0;
-  $("#counterStart").empty();
-  $("#counterStart").show();
+  STORE.score = 0;
 }
 
-//runs the functions
-function makeQuiz() {
-  startQuiz();
-  quizReset();
+//** RENDER FUNCTION **//
+function renderNewQuiz() {
+  renderQuiz();
+  renderReset();
   resetValues();
   nextQuestion();
 }
 
-$(makeQuiz);
+$(renderNewQuiz);
