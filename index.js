@@ -89,7 +89,6 @@ function htmlGenerator() {
   htmlHolder = '';
   htmlHolder += addQuestion();
   htmlHolder += addButtons();
-  console.log(htmlHolder);
   $(".questionBox").html(htmlHolder);
 }
 
@@ -97,13 +96,11 @@ function htmlGenerator() {
 function addQuestion() {
   questionNumber += 1;
   if (questionNumber <= 5) {
-    debugger;
     let htmlHolder = "";
     let quizQuestionTitle = quizQuestions[indexNumber].question;
     const quizAnswers = quizQuestions[indexNumber].answers;
     const quizId = quizQuestions[indexNumber].id;
     htmlHolder = `<h3> ${quizQuestionTitle} </h3>`;
-    console.log(htmlHolder);
     quizAnswers.forEach((a, idx) => {
       htmlHolder += `
       <div class="inline">
@@ -176,7 +173,6 @@ function checkAnswer() {
 function populateScore() {
   scoreGrab = quizQuestions[indexNumber].userAnswer;
   score += scoreGrab
-  console.log(score);
   $("#counterStart").append("<p> Question:" + questionNumber + "/5 </p>" + "<p> Score:" + score + "</p>");
 }
 
@@ -212,7 +208,6 @@ function quizReset() {
     $("#totalScoreBox").hide();
     $(".startQuiz").show();
     resetValues();
-    console.log("`quizReset` ran");
   });
 }
 
