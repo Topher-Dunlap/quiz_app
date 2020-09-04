@@ -9,6 +9,7 @@ const quizQuestions = [
       "Its residents were considered “windbags” and “full of hot air.", 
       "That has never been a chicago nickname", 
       "Flatulence"],
+    userAnswer: 0,
     correctAnswer: "Its residents were considered “windbags” and “full of hot air.",
     id: "chicago",
   },
@@ -21,6 +22,7 @@ const quizQuestions = [
       "Elephant",
       "Armadillo",
     ],
+    userAnswer: 0,
     correctAnswer: "Armadillo",
     id: "bullet",
   },
@@ -33,6 +35,7 @@ const quizQuestions = [
       "They Blow up a building",
       "They Throw their axes from afar",
     ],
+    userAnswer: 0,
     correctAnswer: "They make water 'wetter'",
     id: "fireFighter",
   },
@@ -45,6 +48,7 @@ const quizQuestions = [
       "Small animals",
       "Jet Stream",
     ],
+    userAnswer: 0,
     correctAnswer: "Volcanos",
     id: "go",
   },
@@ -56,6 +60,7 @@ const quizQuestions = [
       "Green Jewel", 
       "Alligator Heart", 
       "Testicles"],
+      userAnswer: 0,
     correctAnswer: "Testicles",
     id: "temp",
   },
@@ -76,32 +81,38 @@ function startQuiz() {
   $(".startQuiz").on("click", ".startButton", function (event) {
     $(".startQuiz").hide();
     $(".questionBox").show();
-    $(".questionBox").html(addQuestion());
-    addButtons();
-    console.log("`startQuiz` ran");
+    htmlGenerator();
   });
 }
 
+function htmlGenerator() {
+  htmlHolder = '';
+  htmlHolder += addQuestion();
+  htmlHolder += addButtons();
+  console.log(htmlHolder);
+  $(".questionBox").html(htmlHolder);
+}
 
 //creates html for question form
 function addQuestion() {
-  populateScore();
   questionNumber += 1;
   if (questionNumber <= 5) {
-    quizQuestion = quizQuestions[indexNumber].question;
-    $(".questionBox").append("<h3>" + quizQuestion + "</h3>");
-    let hmtlHolder = "";
+    debugger;
+    let htmlHolder = "";
+    let quizQuestionTitle = quizQuestions[indexNumber].question;
     const quizAnswers = quizQuestions[indexNumber].answers;
     const quizId = quizQuestions[indexNumber].id;
+    htmlHolder = `<h3> ${quizQuestionTitle} </h3>`;
+    console.log(htmlHolder);
     quizAnswers.forEach((a, idx) => {
-      hmtlHolder += `
+      htmlHolder += `
       <div class="inline">
         <label class="question_padding" for="cat">${a}</label>
         <input type="radio" id="${quizId}-${idx}" class="question" name="${quizId}" value="${a}" /> 
       </div>
       `;
     });
-    $(".questionBox").append(hmtlHolder);
+    return htmlHolder;
   }
   else {
     totalScore();
@@ -116,7 +127,7 @@ function addButtons() {
   <button type="reset" class="resetButton">Reset</button>
   </div>
   `;
-  $(".questionBox").append(buttonHolder);
+  return buttonHolder;
 }
 
 //consolidation function
@@ -136,12 +147,12 @@ function checkAnswer() {
     if (answer === quizQuestions[indexNumber].correctAnswer) {
       // determine if end of quiz
         correctAnswerResponse();
-        score += 1;
+        quizQuestions[indexNumber].userAnswer = 1;
         $(".questionBox").empty();
         $("#counterStart").empty();
+        populateScore();
         indexNumber += 1;
-        addQuestion();
-        addButtons();
+        htmlGenerator();
       }
     //if is incorrect
     else {
@@ -149,9 +160,9 @@ function checkAnswer() {
       // determine if end of quiz
         $(".questionBox").empty();
         $("#counterStart").empty();
+        populateScore();
         indexNumber += 1;
-        addQuestion();
-        addButtons();
+        htmlGenerator();
     }
   }
   //if user hasn't made selection prompt until if statement is true.
@@ -159,11 +170,13 @@ function checkAnswer() {
     $(".questionBox").show(); 
     alert("Please make a selection before continuing");
   }
-  // event.preventDefault();
 }
 
 
 function populateScore() {
+  scoreGrab = quizQuestions[indexNumber].userAnswer;
+  score += scoreGrab
+  console.log(score);
   $("#counterStart").append("<p> Question:" + questionNumber + "/5 </p>" + "<p> Score:" + score + "</p>");
 }
 
@@ -205,7 +218,7 @@ function quizReset() {
 
 function totalScore() {
     $("#finalScoreText").remove();
-    $("#totalScoreBox").prepend(`<h2 id="finalScoreText"> Score: a${score}/5 </h2>`);
+    $("#totalScoreBox").prepend(`<h2 id="finalScoreText"> Final Score: ${score}/5 </h2>`);
     $("#totalScoreBox").show();
     $("#counterStart").empty();
     $("#happyFace").hide();
