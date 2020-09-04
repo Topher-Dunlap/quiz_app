@@ -71,6 +71,15 @@ STORE = {
   score: 0
 }
 
+//** RENDER FUNCTION **//
+function renderStart() {
+  $(".renderQuiz").on("click", ".startButton", function (event) {
+    $(".renderQuiz").hide();
+    $(".questionBox").show();
+    renderHtml();
+  });
+}
+
 
 //** RENDER FUNCTION **//
 function renderQuiz() {
@@ -79,11 +88,7 @@ function renderQuiz() {
   $("#happyFace").hide();
   $("#totalScoreBox").hide();
   $(".questionBox").hide();
-  $(".renderQuiz").on("click", ".startButton", function (event) {
-    $(".renderQuiz").hide();
-    $(".questionBox").show();
-    renderHtml();
-  });
+  renderStart();
 }
 
 //** RENDER FUNCTION **//
@@ -96,8 +101,8 @@ function renderHtml() {
 
 //** CONTROLLER FUNCTION **//
 function addQuestion() {
-  questionNumber += 1;
-  if (questionNumber <= 5) {
+  incrementQuestionNumber();
+  if (STORE.questionNumber <= 5) {
     let htmlHolder = "";
     let quizQuestionTitle = STORE.quizQuestions[STORE.indexNumber].question;
     const quizAnswers = STORE.quizQuestions[STORE.indexNumber].answers;
@@ -144,6 +149,16 @@ function incrementIndex() {
   STORE.indexNumber += 1;
 }
 
+//** CONTROLLER FUNCTION **//
+function incrementUserAnswer() {
+  STORE.quizQuestions[STORE.indexNumber].userAnswer = 1;
+}
+
+//** CONTROLLER FUNCTION **//
+function incrementQuestionNumber() {
+  STORE.questionNumber += 1;
+}
+
 //** RENDER FUNCTION **//
 function renderAnswer() {
   if ($('input:checked').length > 0) {
@@ -153,19 +168,16 @@ function renderAnswer() {
     if (answer === STORE.quizQuestions[STORE.indexNumber].correctAnswer) {
       // determine if end of quiz
         renderCorrectAnswerResponse();
-        STORE.quizQuestions[STORE.indexNumber].userAnswer = 1;
-        $(".questionBox").empty();
-        $("#counterStart").empty();
+        incrementUserAnswer();
+        renderQuizBoxEmpty();
         renderScore();
         incrementIndex()
         renderHtml();
       }
     //if is incorrect
     else {
-      renderWrongAnswerResponse();
-      // determine if end of quiz
-        $(".questionBox").empty();
-        $("#counterStart").empty();
+        renderWrongAnswerResponse();
+        renderQuizBoxEmpty();
         renderScore();
         incrementIndex()
         renderHtml();
@@ -178,11 +190,21 @@ function renderAnswer() {
   }
 }
 
+function renderQuizBoxEmpty() {
+  $(".questionBox").empty();
+  $("#counterStart").empty();
+}
+
+//** CONTROLLER FUNCTION **//
+function calculateScore() {
+  scoreGrab = STORE.quizQuestions[STORE.indexNumber].userAnswer;
+  STORE.score += scoreGrab;
+}
+
 //** RENDER FUNCTION **//
 function renderScore() {
-  scoreGrab = STORE.quizQuestions[STORE.indexNumber].userAnswer;
-  STORE.score += scoreGrab
-  $("#counterStart").append("<p> Question: " + questionNumber + "/5 </p>" + "<p> Score: " + STORE.score + "</p>");
+  calculateScore();
+  $("#counterStart").append("<p> Question: " + STORE.questionNumber + "/5 </p>" + "<p> Score: " + STORE.score + "</p>");
 }
 
 //** RENDER FUNCTION **//
@@ -191,6 +213,11 @@ function renderWrongAnswerResponse() {
   $(".wrongAnswerTemp").remove();
   $("#wrongAnswer").append(`<p class="wrongAnswerTemp">The correct answer was: "${STORE.quizQuestions[STORE.indexNumber].correctAnswer}"</p>`)
   $("#sadFace").show();
+  hideWrongAnswerResponse();
+}
+
+//** RENDER FUNCTION **//
+function hideWrongAnswerResponse() {
   $("#sadFace").on("click", ".nextButton", function (event) {
     $("#sadFace").hide();
     $(".questionBox").show();
@@ -201,6 +228,11 @@ function renderWrongAnswerResponse() {
 function renderCorrectAnswerResponse() {
   $(".questionBox").hide(); 
   $("#happyFace").show();
+  hideCorrectAnswerResponse();
+}
+
+//** RENDER FUNCTION **//
+function hideCorrectAnswerResponse() {
   $("#happyFace").on("click", ".nextButton", function (event) { 
     $("#happyFace").hide();
     $(".questionBox").show(); 
@@ -232,15 +264,20 @@ function renderTotalScore() {
     $("#happyFace").hide();
     $("#sadFace").hide();
     $(".questionBox").hide();
-    $("#totalScoreBox").on("click", ".resetButton", function (event) { 
-      renderReset()
-      }); 
+    quizResetListener();
+}
+
+//** CONTROLLER FUNCTION **//
+function quizResetListener() {
+  $("#totalScoreBox").on("click", ".resetButton", function (event) { 
+    renderReset();
+});
 }
 
 //** CONTROLLER FUNCTION **//
 function resetValues() {
   STORE.indexNumber = 0;
-  questionNumber = 0;
+  STORE.questionNumber = 0;
   STORE.score = 0;
 }
 
